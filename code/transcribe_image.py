@@ -39,18 +39,18 @@ model=load_model('../Dataset/best_model.h5')
 
 # Preprocess all images in test_data folder into binarized single monitor lcd_data with a label file
 label_lst =[]
-for fname in glob.glob(data +'*.jpg'):
+for fname in glob.glob(data +'*.jpeg'):
     preprocessed_img = get_lcd(fname)
 
-    #Save Systolic and diastolic contours with _SP.jpg and _DP.jpg suffix respectively            
+    #Save Systolic and diastolic contours with _SP.jpeg and _DP.jpeg suffix respectively            
     tag=os.path.basename(fname).split('.')[0]        #Filename Tag for LCD lcd_data
     w, h=preprocessed_img.shape
-    cv2.imwrite(lcd_data + tag+'_SP.jpg', preprocessed_img[0:int(h/2),0:w])
-    cv2.imwrite(lcd_data + tag+'_DP.jpg', preprocessed_img[int(h/2):h,0:w])
+    cv2.imwrite(lcd_data + tag+'_SP.jpeg', preprocessed_img[0:int(h/2),0:w])
+    cv2.imwrite(lcd_data + tag+'_DP.jpeg', preprocessed_img[int(h/2):h,0:w])
 
     #Adding image data into labels file
-    label_lst.append(tag+'_SP.jpg')
-    label_lst.append(tag+'_DP.jpg')
+    label_lst.append(tag+'_SP.jpeg')
+    label_lst.append(tag+'_DP.jpeg')
 
 frame_labels = pd.DataFrame({'filename': label_lst})
 
@@ -72,8 +72,8 @@ for i in range(X_test.shape[0]):
         predicted_num = predicted_num-1000
 
     fname = frame_labels.filename[i]         
-    if fname.endswith('_SP.jpg'):
-        df.loc[df['filename'].str.contains(fname.strip('_SP.jpg')), 'predicted_SBP'] = predicted_num
-    elif fname.endswith('_DP.jpg'):
-        df.loc[df['filename'].str.contains(fname.strip('_DP.jpg')), 'predicted_DBP'] = predicted_num        
+    if fname.endswith('_SP.jpeg'):
+        df.loc[df['filename'].str.contains(fname.strip('_SP.jpeg')), 'predicted_SBP'] = predicted_num
+    elif fname.endswith('_DP.jpeg'):
+        df.loc[df['filename'].str.contains(fname.strip('_DP.jpeg')), 'predicted_DBP'] = predicted_num        
 df.to_csv(results + 'test_data_predictions.csv')
